@@ -29,26 +29,22 @@ class App extends React.Component {
   };
 
   handleSearch = (e) => {
-    this.setState({ searchTerm: e.target.value });
-    // this.setState({ ...this.state.searchTerm = e.target.value });
+    this.setState({ searchTerm: e.target.value }, () => {
+      let searchKey = this.state.searchTerm.toLowerCase().trim();
+      if (searchKey && searchKey.length > 0) {
+        const newLibrariesDate = libraries.filter((librarie) => {
+          return librarie.toLowerCase().includes(searchKey);
+        });
 
-    let searchKey = this.state.searchTerm.toLowerCase().trim();
-
-    console.log(this.state.searchTerm);
-
-    if (searchKey && searchKey.length > 0) {
-      const newLibrariesDate = libraries.filter((librarie) => {
-        return librarie.toLowerCase().includes(searchKey);
-      });
-
-      if (newLibrariesDate.length > 0) {
-        this.setState({ libraries: newLibrariesDate, notFound: false });
+        if (newLibrariesDate.length > 0) {
+          this.setState({ libraries: newLibrariesDate, notFound: false });
+        } else {
+          this.setState({ libraries: [], notFound: true });
+        }
       } else {
-        this.setState({ libraries: [], notFound: true });
+        this.setState({ libraries, notFound: false });
       }
-    } else {
-      this.setState({ libraries, notFound: false });
-    }
+    });
   };
 
   render() {
